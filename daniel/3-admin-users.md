@@ -428,3 +428,22 @@ Et un petit add / commit / push pour être sûr-e de rien perdre !
 Le principe est assez simple, dans le routeur si quelqu'un veut accéder à une page de l'admin (à part le login) nous allons vérifier si un utilisateur est connecté et si cet utilisateur a le rôle admin. Si ça n'est pas le cas, nous le renvoyons directement sur la page de login de l'admin.
 
 Pour l'instant le login de l'admin n'est pas fonctionnel, donc on va se débrouiller autrement pour connecter un admin. Pour commencer on va passer l'un des utilisateurs dans notre base de données en role ADMIN (utilisez PhpMyAdmin). Une fois que c'est fait, on va utiliser le formulaire de login du front et ensuite allez sur les URLs de l'admin.
+
+
+## Étape 2 : lister les utilisateurs
+
+### Étape 2.1 : le UserManager
+
+Dans les UserManager, nous allons devoir rajouter une nouvelle méthode `findAllUsers() : array` qui nous renverra un tableau d'instances de la classe User, récupéré depuis la base de données.
+
+### Étape 2.2 : Le UserController
+
+Dans la méthode `list` du `UserController`, nous allons appeler la méthode `findAllUsers` du `UserManager` pour récupérer la liste des utilisateurs. Nous allons ensuite la passer dans la tableau de données de la méthode `render` pour pouvoir l'utiliser dans notre template.
+
+### Étape 2.3 : le template
+
+Dans le template `admin/users/list.html.twig` vous allez dynamiser le `<tbody>` de la table pour faire en sorte que chacune des rangées (`<tr>`) corresponde à un User de votre liste. Pour le moment laissez les boutons d'action tels qu'ils sont.
+
+### Étape 2.4 : git
+
+Un petit add / commit / push pour sauvegarder notre travail :)
