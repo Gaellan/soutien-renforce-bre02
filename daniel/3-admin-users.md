@@ -458,17 +458,41 @@ Dans la méthode `checkCreate` du `UserController`, nous allons traiter le formu
 
 ## Étape 4 : Détails d'un utilisateur
 
-### Étape 4.1 : le routeur
+### Étape 4.1 : le UserManager
+
+Dans le `UserManager` nous allons créer une nouvelle méthode `findUserById(int $id) : ? User` qui permet de trouver un utilisateur dans la base de données à partir de son id.
+
+🚨 Attention à bien respecter le prototype de la méthode, elle retourne soit null, soit un User et prend un int en paramètres.
 
 ### Étape 4.2 : le UserController
 
-### Étape 4.3 : le UserManager
+Dans le UserController nous allons modifier notre méthode `show`, elle ressemblera désormais à ceci : 
+
+```php
+public function show(int $id) : void {
+    $this->render("admin/users/show.html.twig", []);
+}
+```
+
+Nous allons dans notre méthode `show` appeler la méthode `findUserById` du `UserManager` pour récupérer les infoemations de l'utilisateur dont l'id a été récu en paramètre (`int $id`).
+
+S'il existe nous allons l'envoyer dans le tableau de données de la méthode `$this->render`, s'il n'existe pas nous allons rediriger vers la liste des utilisateurs.
+
+### Étape 4.3 : le routeur
+
+Dans notre routeur, là où nous vérifions si la route correspond à `admin-show-user` nous allons rajouter une condition qui vérifie si le paramètre `$_GET['user_id']` existe bien. S'il existe nous allons le transformer en int en le castant ou en utilisant `intval()` puis l'envoyer à la méthode `show()`.
 
 ### Étape 4.4 : les templates
 
 #### Étape 4.4.1 : show.html.twig
 
+Nous allons utiliser le `User` reçu via la méthode render pour dynmiser les informations de la page.
+
 #### Étape 4.4.2 : list.html.twig
+
+Nous allons rendre dynamique le lien pour voir les détails d'un utilisateur dans les actions du tableau. L'URL du premier des trois liens devra donc ressembler à ça : `index.php?route=admin-show-user&user_id={{user.id}}}`.
+
+🚨 Attention si dans votre boucle d'affichage vous avez utilisé un autre nom de variable que `user`, adaptez à ce que vous avez fait.
 
 
 ## Étape 5 : Modifier un utilisateur
