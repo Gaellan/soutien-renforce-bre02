@@ -447,3 +447,10 @@ Dans le template `admin/users/list.html.twig` vous allez dynamiser le `<tbody>` 
 ### Étape 2.4 : git
 
 Un petit add / commit / push pour sauvegarder notre travail :)
+
+
+## Étape 3 : Créer un utilisateur
+
+### Étape 3.1 : le UserController
+
+Dans la méthode `checkCreate` du `UserController`, nous allons traiter le formulaire de création d'un utilisateur. Vous pouvez vous inspirer de ce que nous avont fait pour l'inscription côté front. Attention le formulaire n'est pas exactement le même, donc il faut bien vérifier pour ne rien oublier. Une fois l'utilisateur créé nous allons rediriger vers la page de liste des utilisateurs.
