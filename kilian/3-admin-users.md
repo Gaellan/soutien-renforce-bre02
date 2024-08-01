@@ -493,3 +493,14 @@ Nous allons utiliser le `User` reçu via la méthode render pour dynmiser les in
 Nous allons rendre dynamique le lien pour voir les détails d'un utilisateur dans les actions du tableau. L'URL du premier des trois liens devra donc ressembler à ça : `index.php?route=admin-show-user&user_id={{user.id}}}`.
 
 🚨 Attention si dans votre boucle d'affichage vous avez utilisé un autre nom de variable que `user`, adaptez à ce que vous avez fait.
+
+
+## Étape 5 : Modifier un utilisateur
+
+À partir de ce que nous avons fait dans les étapes précédentes, essayez de coder vous-même la fonctionnalité de modification d'un utilisateur.
+
+Vous allez, comme pour le `show`, mettre en place un système qui permet de connaitre l'id de l'utilisateur à modifier et l'injecter directement dans les values du formulaire d'édition.
+
+Vous allez également devoir créer une nouvelle méthode pour modifier un utilisateur dans le `UserManager`, voilà le prototype qu'elle doit avoir : `public function updateUser(User $user) : User`.
+
+Puis vous allez devoir traiter ce formulaire pour appliquer les modifications.

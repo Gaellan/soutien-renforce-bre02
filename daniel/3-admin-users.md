@@ -497,23 +497,10 @@ Nous allons rendre dynamique le lien pour voir les détails d'un utilisateur dan
 
 ## Étape 5 : Modifier un utilisateur
 
-### Étape 5.1 : le routeur
+À partir de ce que nous avons fait dans les étapes précédentes, essayez de coder vous-même la fonctionnalité de modification d'un utilisateur.
 
-### Étape 5.2 : le UserController
+Vous allez, comme pour le `show`, mettre en place un système qui permet de connaitre l'id de l'utilisateur à modifier et l'injecter directement dans les values du formulaire d'édition.
 
-### Étape 5.3 : le UserManager
+Vous allez également devoir créer une nouvelle méthode pour modifier un utilisateur dans le `UserManager`, voilà le prototype qu'elle doit avoir : `public function updateUser(User $user) : User`.
 
-### Étape 5.4 : les templates
-
-#### Étape 5.4.1 : edit.html.twig
-
-#### Étape 5.4.2 : list.html.twig
-
-
-## Étape 6 : Modifier un utilisateur
-
-### Étape 6.1 : le UserController
-
-### Étape 6.2 : le UserManager
-
-### Étape 6.3 : les templates
+Puis vous allez devoir traiter ce formulaire pour appliquer les modifications.
