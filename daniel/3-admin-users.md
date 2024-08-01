@@ -504,3 +504,132 @@ Vous allez, comme pour le `show`, mettre en place un système qui permet de conn
 Vous allez également devoir créer une nouvelle méthode pour modifier un utilisateur dans le `UserManager`, voilà le prototype qu'elle doit avoir : `public function updateUser(User $user) : User`.
 
 Puis vous allez devoir traiter ce formulaire pour appliquer les modifications.
+
+
+## Étape 6 : Supprimer un utilisateur
+
+### Étape 6.1 : Mettre en place la modale
+
+Pour éviter de supprimer un utilisateur nous allons rajouter une petite modale fournie par Bootstrap qui permet d'afficher une fenêtre de confirmation avant de supprimer un utilisateur.
+
+Elle demande pas mal de HTML et un peu de JavaScript du coup je vous fournis le code (qui est celui de Bootstrap légèrement modifié) du nouveau template `admin/users/list.html.twig` :
+
+```html
+{% extends 'admin/layout.html.twig' %}
+
+{% block main %}
+    <main class="container py-5">
+        <h1 class="mb-4">Liste des utilisateurs</h1>
+        {% if session.success_message %}
+            <div class="alert alert-success" role="alert">
+                {{ session.success_message }}
+            </div>
+        {% endif %}
+        <a href="index.php?route=admin-create-user" class="btn btn-primary mb-4">Ajouter un utilisateur</a>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>
+                        #
+                    </th>
+                    <th>
+                        Email
+                    </th>
+                    <th>
+                        Role
+                    </th>
+                    <th>
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>
+                            {{ user.id }}
+                        </td>
+                        <td>
+                            {{ user.email }}
+                        </td>
+                        <td>
+                            {{ user.role }}
+                        </td>
+                        <td>
+                            <a class="btn btn-primary" href="index.php?route=admin-show-user&user_id={{ user.id }}" title="Voir l'utilisateur"><span class="bi bi-eye-fill" aria-hidden="true"></span></a>
+                            <a class="btn btn-success" href="index.php?route=admin-edit-user&user_id={{ user.id }}" title="Modifier l'utilisateur"><span class="bi bi-pencil-fill" aria-hidden="true"></span></a>
+                            <button data-bs-toggle="modal" data-bs-target="#deleteUserModal" class="btn btn-danger" title="Supprimer l'utilisateur" data-bs-user="{{ user.email }}" data-bs-id="{{ user.id }}"><span class="bi bi-trash-fill" aria-hidden="true"></span></button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div class="modal fade" id="deleteUserModal" tabindex="-1" aria-labelledby="deleteModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="deleteModalTitle">Spprimer un utilisateur</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <h2 class="h4">Voulez vous vraiment supprimer cet utilisateur ?</h2>
+                        <p class="my-2">
+
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="button" class="btn btn-danger">Supprimer</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+{% block javascript %}
+    {{ parent() }}
+    <script type="application/javascript">
+        window.addEventListener("DOMContentLoaded", function(){
+            const modal = document.getElementById('deleteUserModal');
+            if (modal) {
+              modal.addEventListener('show.bs.modal', event => {
+                // Button that triggered the modal
+                const button = event.relatedTarget;
+                // Extract info from data-bs-* attributes
+                const email = button.getAttribute('data-bs-user');
+                const id = button.getAttribute('data-bs-id');
+
+                // Update the modal's content.
+                const modalP = modal.querySelector('.modal-body p');
+
+                modalP.innerHTML = email;
+                const deleteBtn = modal.querySelector('.modal-footer .btn-danger');
+
+                deleteBtn.addEventListener('click', () => {
+                    window.location.href = `index.php?route=admin-delete-user&user_id=${id}`;
+                });
+
+              })
+            }
+        });
+    </script>
+{% endblock %}
+```
+
+### Étape 6.2 : modifier le routeur
+
+Comme pour `show` et `edit`, notre route va prendre un paramètre `user_id`, rajoutez la vérification dans le `Router`, transformez le en `int` et envoyez le à la méthode `delete` du `UserController`.
+
+### Étape 6.3 : le manager
+
+Dans le `UserManager` nous allons devoir créer une nouvelle méthode `public function delteUser(int $id) : void` qui efface l'utilisateur qui a l'`id` reçu en paramètres.
+
+### Étape 6.4 : le controlleur
+
+Dans la méthode `delete` du `UserController` pensez à modifier son prototype qui est maintenant `public function delete(int $id)`, ensuite nous allons devoir appeler la méthode `deleteUser` du `UserManager` en lui pssant l'id reçu en paramètres. Une fois que c'est fait redirigez vers la liste des utilisateurs.
+
+
+### Étape 7 : le login de l'admin
+
+Dernière étape : vous allez devoir mettre en place le login de l'admin (sur la page `admin-connexion`). Faites en sortes que si l'utilisateur qui tente de se connecter a le bon email, le bon mot de passe et est admin, vous le redirigez vers la route `admin` sinon, vous le renvoyez vers la home du front.
+
